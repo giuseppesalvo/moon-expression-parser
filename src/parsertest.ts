@@ -1,3 +1,4 @@
+/*
 import { TokenType, Token, parse } from '../src';
 
 describe("tokenizer", () => {
@@ -46,7 +47,7 @@ describe("tokenizer", () => {
             new Token(TokenType.Operator, "-"),
         ])
     })
-*/
+
     it("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3", () => {
 
         const tokens = parse("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3");
@@ -70,7 +71,7 @@ describe("tokenizer", () => {
         ])
 
     })
-/*
+
     it("sin ( max ( 2, 3 ) / 3 * p )", () => {
 
         const tokens = parse("sin ( max ( 2, 3 ) / 3 * p )");
@@ -87,5 +88,6 @@ describe("tokenizer", () => {
             new Token(TokenType.Function, "sin"),
         ])
 
-    })*/
+    })
 });
+*/

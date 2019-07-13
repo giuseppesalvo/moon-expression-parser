@@ -30,14 +30,19 @@ describe("tokenizer", () => {
 
         const tokens = tokenize("456.7xy + 6sin(7.04x) - min(a, 7)");
 
+        console.log("tokens: ", tokens);
+
         expect(tokens).toEqual([
             new Token(TokenType.Literal, "456.7"),
+            new Token(TokenType.Operator, "*"),
             new Token(TokenType.Variable, "xy"),
             new Token(TokenType.Operator, "+"),
             new Token(TokenType.Literal, "6"),
+            new Token(TokenType.Operator, "*"),
             new Token(TokenType.Function, "sin"),
             new Token(TokenType.LeftParentesis, "("),
             new Token(TokenType.Literal, "7.04"),
+            new Token(TokenType.Operator, "*"),
             new Token(TokenType.Variable, "x"),
             new Token(TokenType.RightParentesis, ")"),
             new Token(TokenType.Operator, "-"),
@@ -60,9 +65,11 @@ describe("tokenizer", () => {
             new Token(TokenType.Literal, "5"),
             new Token(TokenType.Operator, "+"),
             new Token(TokenType.Literal, "3"),
+            new Token(TokenType.Operator, "*"),
             new Token(TokenType.Variable, "kmlkmd"),
             new Token(TokenType.Variable, "in"),
             new Token(TokenType.Literal, "4"),
+            new Token(TokenType.Operator, "*"),
             new Token(TokenType.Variable, "o"),
             new Token(TokenType.Variable, "ciao4"),
             new Token(TokenType.Variable, "ciao4a"),

@@ -123,6 +123,12 @@ export function tokenize(input: string) {
                         numberBuffer.join("")
                     )
                 );
+                tokens.push(
+                    new Token(
+                        TokenType.Operator,
+                        "*"
+                    )
+                );
                 numberBuffer = [];
             }
 

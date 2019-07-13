@@ -64,7 +64,7 @@ export const TokenTestMap: TokenTestMap = {
     },
     [TokenType.Literal]: { 
         type: TokenType.Literal,
-        test: (char: string) => /[\d\.]/.test(char),
+        test: (char: string) => /[\d\.\$%€]/.test(char),
     },
     [TokenType.Variable]: { 
         type: TokenType.Variable,

@@ -1,8 +1,8 @@
 export class ASTNode<T> {
     constructor(
         public value: T,
-        public leftChildNode?: ASTNode<T> | undefined,
-        public rightChildNode?: ASTNode<T> | undefined,
+        public leftChildNode?: ASTNode<T>,
+        public rightChildNode?: ASTNode<T>,
     ) {}
 
     toString(count = 0): string {
@@ -41,5 +41,9 @@ export class AST<T> {
     toString(): String {
         //a little hack I put together so it prints out in a readable formASTNode.prototype.toString = function(count) {
         return this.nodes.toString();
+    }
+
+    head(): ASTNode<T> {
+        return this.nodes[0];
     }
 }
