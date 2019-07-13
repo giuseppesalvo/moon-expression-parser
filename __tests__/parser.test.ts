@@ -1,8 +1,7 @@
-import { TokenType, Token } from '../src/tokenizer';
-import { parse } from '../src/parser';
+import { TokenType, Token, parse } from '../src';
 
 describe("tokenizer", () => {
-
+/*
     it("1 + 2", () => {
 
         const tokens = parse("1 + 2");
@@ -47,10 +46,12 @@ describe("tokenizer", () => {
             new Token(TokenType.Operator, "-"),
         ])
     })
-
+*/
     it("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3", () => {
 
         const tokens = parse("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3");
+
+        console.log(tokens.nodes.toString());
 
         expect(tokens).toEqual([
             new Token(TokenType.Literal, "3"),
@@ -69,7 +70,7 @@ describe("tokenizer", () => {
         ])
 
     })
-
+/*
     it("sin ( max ( 2, 3 ) / 3 * p )", () => {
 
         const tokens = parse("sin ( max ( 2, 3 ) / 3 * p )");
@@ -86,5 +87,5 @@ describe("tokenizer", () => {
             new Token(TokenType.Function, "sin"),
         ])
 
-    })
+    })*/
 });

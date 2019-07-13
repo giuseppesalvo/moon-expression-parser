@@ -1,51 +1,5 @@
-import { tokenize, Token, TokenType, AssocDir } from './tokenizer';
+import { tokenize, Token, TokenType, AssocDir, AST } from '../src';
 import { peek } from './utils'; 
-
-class ASTNode<T> {
-    constructor(
-        public value: T,
-        public leftChildNode?: ASTNode<T> | undefined,
-        public rightChildNode?: ASTNode<T> | undefined,
-    ) {}
-
-    toString(count = 1): string {
-        if (!this.leftChildNode && !this.rightChildNode)
-            return this.value + " =>null\n" + Array(count + 1).join(" ") + "=>null";
-        const left: string = this.leftChildNode ? this.leftChildNode.toString(count+1) : "";
-        const right: string = this.rightChildNode ? this.rightChildNode.toString(count+1) : "";
-        return this.value + " =>" + left + "\n" + Array(count).join(" ") + "=>" + right;
-    }
-}
-
-class AST<T> {
-
-    public nodes: Array<ASTNode<T>> = []
-
-    addNode(value: T): void {
-        const leftChildNode = this.nodes.pop();
-        const rightChildNode = this.nodes.pop();
-        this.nodes.push(
-            new ASTNode(
-                value,
-                leftChildNode,
-                rightChildNode,
-            )
-        )
-    }
-
-    push(value: T) {
-        this.nodes.push(
-            new ASTNode(
-                value,
-            )
-        )
-    }
-
-    toString(): String {
-        //a little hack I put together so it prints out in a readable formASTNode.prototype.toString = function(count) {
-        return this.nodes.toString();
-    }
-}
 
 export function parse(input: string): AST<Token> {
     
@@ -53,8 +7,6 @@ export function parse(input: string): AST<Token> {
     const opStack: Array<Token> = new Array();
     
     const tokens = tokenize(input);
-
-    //console.log("Parsing: " + input);
 
     tokens.forEach((token, i) => {
 
@@ -120,14 +72,6 @@ export function parse(input: string): AST<Token> {
                 opStack.pop();
             }
         }
-/*
-        console.log(
-            "iteration: " + i + "\n" +
-            `token: ${token.value}, ${token.type}` + "\n" +
-            "operatorsStack: " + opStack.map(v => v.value).toString() + "\n" +
-            "outputQueue: " + outQueue.map(v => v.value).toString()
-        );
-        */
     })
 
     while ( outStack && opStack.length > 0 ) {
@@ -138,5 +82,3 @@ export function parse(input: string): AST<Token> {
 
     return outStack;
 }
-
-console.log(parse("1+2").toString())
