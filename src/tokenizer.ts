@@ -44,6 +44,10 @@ export class Token {
     associativity(): AssocDir {
         return Assoc[this.value];
     }
+
+    toString(): string {
+        return this.value;
+    }
 };
 
 type TokenTestMap = {
