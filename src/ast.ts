@@ -4,14 +4,6 @@ export class ASTNode<T> {
         public leftChildNode?: ASTNode<T>,
         public rightChildNode?: ASTNode<T>,
     ) {}
-
-    toString(count = 0): string {
-        if (!this.leftChildNode && !this.rightChildNode)
-            return this.value + " => null\n" + Array(count).join("\t") + "    " + "=> null"
-        const left: string = this.leftChildNode ? this.leftChildNode.toString(count+2) : "";
-        const right: string = this.rightChildNode ? this.rightChildNode.toString(count+2) : "";
-        return this.value + "\t=>" + left + "\n" + Array(count+2).join("\t") + "=>" + right;
-    }
 }
 
 export class AST<T> {
