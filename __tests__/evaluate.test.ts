@@ -74,4 +74,23 @@ describe("evaluator", () => {
 
     });
 
+    it("4 = 5", () => {
+
+        const result = evaluate("4 = 5 + 5");
+
+        expect(result)
+        .toEqual(10);
+
+    });
+
+    it("4 + ( 10 = 5 )", () => {
+
+        const result = evaluate("4 + ( 10 = 5 )");
+
+        console.log('assignment: ', result)
+
+        expect(result)
+        .toEqual(9);
+    });
+
 });

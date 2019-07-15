@@ -20,6 +20,7 @@ export function evaluateNode(node?: ASTNode<Token>): number {
             case "*": return left * right;
             case "/": return left / right;
             case "^": return left ** right;
+            case "=": return right;
         }
     }
 

@@ -2,7 +2,6 @@ import { TokenType, TokenTestMap, Token } from './token';
 
 export function tokenize(input: string) {
 
-
     let numberBuffer: string[] = [];
     let textBuffer: string[] = [];
 
