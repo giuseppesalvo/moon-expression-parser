@@ -2,13 +2,14 @@ export enum TokenType {
     Comma = "Comma",
     Whitespace = "Whitespace",
     Literal = "Literal",
-    Variable = "Variable",
+    Identifier = "Identifier",
+    FunctionIdentifier = "FunctionIdentifier",
     Operator = "Operator",
+    BinaryExpression = "BinaryExpression",
     LeftParentesis = "LeftParentesis",
     RightParentesis = "RightParentesis",
-    Function = "Function"
+    FunctionExpression = "FunctionExpression"
 }
-
 
 export enum AssocDir {
     right = "right",
@@ -33,24 +34,93 @@ const PrecedenceMap: Record<string, number> = {
     "=" : 1,
 };
 
-export class Token {
+export abstract class Token {
     constructor(
         public type: TokenType,
-        public value: string
+        public start: number,
+        public end: number
     ) {}
+}
+
+export class CharToken extends Token {
+    constructor(
+        public type: TokenType,
+        public start: number,
+        public end: number,
+        public char: string,
+    ) {
+        super(type, start, end)
+    }
+}
+
+export class Identifier extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public name: string
+    ) {
+        super(TokenType.Identifier, start, end);
+    }
+}
+
+export class BinaryExpression extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public operator: Operator,
+        public right?: Token|undefined,
+        public left?: Token|undefined
+    ) {
+        super(TokenType.BinaryExpression, start, end);
+    }
+}
+
+
+export class Operator extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public operator: string,
+    ) {
+        super(TokenType.Operator, start, end);
+    }
 
     precedence(): number {
-        return PrecedenceMap[this.value];
+        return PrecedenceMap[this.operator];
     }
 
     associativity(): AssocDir {
-        return Assoc[this.value];
+        return Assoc[this.operator];
     }
 
     toString(): string {
-        return this.value;
+        return this.operator;
     }
-};
+}
+
+export class Literal extends Token {
+    public value: number
+
+    constructor(
+        public start: number,
+        public end: number,
+        public raw: string
+    ) {
+        super(TokenType.Literal, start, end);
+        this.value = parseFloat(raw);
+    }
+}
+
+export class FunctionExpression extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public callee: Identifier,
+        public args: Token[]
+    ) {
+        super(TokenType.FunctionExpression, start, end);
+    }
+}
 
 type TokenTestMap = {
     [prop: string]: {
@@ -66,11 +136,11 @@ export const TokenTestMap: TokenTestMap = {
     },
     [TokenType.Literal]: { 
         type: TokenType.Literal,
-        test: (char: string) => /[\d\.\$%€]/.test(char),
+        test: (char: string) => /[\d\.]/.test(char),
     },
-    [TokenType.Variable]: { 
-        type: TokenType.Variable,
-        test: (char: string) => /[a-z]/i.test(char),
+    [TokenType.Identifier]: { 
+        type: TokenType.Identifier,
+        test: (char: string) => /[a-zA-Z\_]/i.test(char),
     },
     [TokenType.Operator]: { 
         type: TokenType.Operator,
@@ -78,14 +148,27 @@ export const TokenTestMap: TokenTestMap = {
     },
     [TokenType.LeftParentesis]: { 
         type: TokenType.LeftParentesis,
-        test: (char: string) => char === "(",
+        test: (char: string) => /[\{\[\(]/.test(char),
     },
     [TokenType.RightParentesis]: { 
         type: TokenType.RightParentesis,
-        test: (char: string) => char === ")",
+        test: (char: string) => /[\)\]\}]/.test(char),
     },
     [TokenType.Whitespace]: { 
         type: TokenType.Whitespace,
         test: (char: string) => char === " ",
     }
+}
+
+export function getTokenType(input: string): TokenType|null {
+    let type = null;
+
+    for ( let key in TokenTestMap ) {
+        if ( TokenTestMap[key].test(input) ) {
+            type = TokenTestMap[key].type
+            break;
+        }
+    }
+
+    return type
 }
