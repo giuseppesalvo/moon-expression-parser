@@ -4,7 +4,6 @@ import {
     BinaryExpression,
     FunctionExpression,
     Identifier,
-    LeftParentesis,
     Operator
 } from './token';
 
