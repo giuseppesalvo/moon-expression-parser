@@ -223,7 +223,7 @@ export function parse(
                         op
                     )
                 }
-                console.log(opStack.pop())
+                opStack.pop();
                 op = peek(opStack);
             }
 

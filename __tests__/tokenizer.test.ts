@@ -1,12 +1,11 @@
 import {
     tokenize,
     TokenType,
-    getTokenType,
     Literal,
     Identifier,
-    Token,
     CharToken,
     Operator,
+    Comment
 } from '../src/index';
 
 describe("tokenizer", () => {
@@ -97,27 +96,32 @@ describe("tokenizer", () => {
 
     })
 
-/*
-    it("5+3kmlkmd in 4o ciao4 ciao4a 1", () => {
+    it("inline comments", () => {
 
-        const tokens = tokenize("5+3kmlkmd in 4o ciao4 ciao4a 1");
+        const tokens = tokenize("1 + 2 # hello");
 
         expect(tokens).toEqual([
-            //5+3kmlkmdin 4o ciao4 ciao4a 1
-            new Token(TokenType.Literal, "5"),
-            new Token(TokenType.Operator, "+"),
-            new Token(TokenType.Literal, "3"),
-            new Token(TokenType.Operator, "*"),
-            new Token(TokenType.Variable, "kmlkmd"),
-            new Token(TokenType.Variable, "in"),
-            new Token(TokenType.Literal, "4"),
-            new Token(TokenType.Operator, "*"),
-            new Token(TokenType.Variable, "o"),
-            new Token(TokenType.Variable, "ciao4"),
-            new Token(TokenType.Variable, "ciao4a"),
-            new Token(TokenType.Literal, "1"),
+            new Literal(
+                0, 1, "1"
+            ),
+            new Operator(2, 3, "+"),
+            new Literal(
+                4, 5, "2"
+            ),
+            new Comment(
+                6, 13, "# hello"
+            ),
         ])
+    })
 
-    });
-*/
+    it("full comment", () => {
+
+        const tokens = tokenize("# hello + 2 + 1 + sin(10)");
+
+        expect(tokens).toEqual([
+            new Comment(
+                0, 25, "# hello + 2 + 1 + sin(10)"
+            ),
+        ])
+    })
 });

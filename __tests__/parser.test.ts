@@ -1,4 +1,10 @@
-import { parse, tokenize, BinaryExpression, Operator, Literal } from '../src';
+import {
+    parse,
+    tokenize,
+    BinaryExpression,
+    Operator,
+    Literal
+} from '../src';
 
 describe("parser", () => {
 
@@ -9,7 +15,9 @@ describe("parser", () => {
 
         expect(asts).toEqual([
             new BinaryExpression(
-                0, 5, new Operator(2, 3, "+"),
+                0, 
+                5,
+                new Operator(2, 3, "+"),
                 new Literal(0, 1, "1"),
                 new Literal(4, 5, "2"),
             )
