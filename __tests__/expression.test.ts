@@ -1,6 +1,6 @@
 import {
     Expression
-} from '../src/index';
+} from '../src';
 
 describe("expression", () => {
 
@@ -35,6 +35,55 @@ describe("expression", () => {
 
         expect(result)
         .toEqual([656100000011]);
+    });
+
+    it("a + 2, a = 20, a * 2", () => {
+        const exp = new Expression({
+            "a": 2
+        });
+        const result = exp.evaluate("a + 2, a = 20, a * 2");
+        expect(result).toEqual([ 4, 20, 40 ]);
+    });
+
+    it("Context should persists during evaluations", () => {
+        const exp = new Expression({
+            "a": 2
+        });
+        const result1 = exp.evaluate("a + 2");
+        const result2 = exp.evaluate("a = 10");
+        const result3 = exp.evaluate("a * 3");
+        expect(result1).toEqual([ 4 ]);
+        expect(result2).toEqual([ 10 ]);
+        expect(result3).toEqual([ 30 ]);
+    });
+
+    it("3 + 4 * 2a2 + ( 100 - sin( 5 * 4 ^ a2 ) + 20 / 2 ) ^ 2", () => {
+
+        const exp = new Expression(
+            {
+                "a2": 2
+            },
+            {
+                "sin": (args: Array<number|undefined>) =>  Math.sin(args[0] as number)
+            }
+        );
+        const result = exp.evaluate("3 + 4 * 2a2 + ( 100 - sin( 5 * 4 ^ a2 ) + 20 / 2 ) ^ 2");
+
+        expect(result)
+        .toEqual([12338.64331851954]);
+    });
+
+    it("multiple function arguments", () => {
+        const exp = new Expression(
+            {},
+            {
+                "pow": (args: Array<number|undefined>) =>  Math.pow(args[0] as number, args[1] as number)
+            }
+        );
+        const result = exp.evaluate("pow(1 + 2 * 4, 2)");
+
+        expect(result)
+        .toEqual([81]);
     })
 
 });
