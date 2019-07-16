@@ -3,7 +3,6 @@ export enum TokenType {
     Whitespace = "Whitespace",
     Literal = "Literal",
     Identifier = "Identifier",
-    FunctionIdentifier = "FunctionIdentifier",
     Operator = "Operator",
     BinaryExpression = "BinaryExpression",
     LeftParentesis = "LeftParentesis",
@@ -42,6 +41,28 @@ export abstract class Token {
     ) {}
 }
 
+export class LeftParentesis extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public char: string,
+        public endIndex: number,
+    ) {
+        super(TokenType.LeftParentesis, start, end)
+    }
+}
+
+export class RightParentesis extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public char: string,
+        public startIndex: number
+    ) {
+        super(TokenType.RightParentesis, start, end)
+    }
+}
+
 export class CharToken extends Token {
     constructor(
         public type: TokenType,
@@ -68,8 +89,8 @@ export class BinaryExpression extends Token {
         public start: number,
         public end: number,
         public operator: Operator,
+        public left?: Token|undefined,
         public right?: Token|undefined,
-        public left?: Token|undefined
     ) {
         super(TokenType.BinaryExpression, start, end);
     }
@@ -116,7 +137,7 @@ export class FunctionExpression extends Token {
         public start: number,
         public end: number,
         public callee: Identifier,
-        public args: Token[]
+        public args: Token[][] = []
     ) {
         super(TokenType.FunctionExpression, start, end);
     }
