@@ -87,8 +87,8 @@ export class BinaryExpression extends Token {
         public start: number,
         public end: number,
         public operator: Operator,
-        public left?: Token|undefined,
-        public right?: Token|undefined,
+        public left: Token,
+        public right: Token,
     ) {
         super(TokenType.BinaryExpression, start, end);
     }
@@ -99,22 +99,22 @@ export class Operator extends Token {
     constructor(
         public start: number,
         public end: number,
-        public operator: string,
+        public value: string,
         public implicit = false
     ) {
         super(TokenType.Operator, start, end);
     }
 
     precedence(): number {
-        return PrecedenceMap[this.operator];
+        return PrecedenceMap[this.value];
     }
 
     associativity(): AssocDir {
-        return Assoc[this.operator];
+        return Assoc[this.value];
     }
 
     toString(): string {
-        return this.operator;
+        return this.value;
     }
 }
 

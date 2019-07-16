@@ -1,6 +1,12 @@
-import { tokenize, Token, TokenType, AssocDir } from '../src';
+import { Token, TokenType, AssocDir } from '../src';
 import { peek } from './utils'; 
-import { BinaryExpression, FunctionExpression, Identifier, LeftParentesis, Operator } from './token';
+import {
+    BinaryExpression,
+    FunctionExpression,
+    Identifier,
+    LeftParentesis,
+    Operator
+} from './token';
 
 export function parse(
     tokens: Token[],
