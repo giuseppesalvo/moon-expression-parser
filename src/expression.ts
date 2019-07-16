@@ -1,7 +1,6 @@
 import { tokenize } from './tokenizer';
 import { parse } from './parser';
 import { evaluate } from './evaluate';
-
 import {
     ExpressionContext,
     Functions,
@@ -19,8 +18,8 @@ export class Expression {
         variables: Variables = {},
         functions: Functions = {}
     ) {
-        Object.assign(this.context.variables, variables);
-        Object.assign(this.context.functions, functions);
+        this.addVariables(variables);
+        this.addFunctions(functions);
     }
 
     evaluate(input: string): (number|undefined)[] {
