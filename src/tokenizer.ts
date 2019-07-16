@@ -20,7 +20,7 @@ export function tokenize(input: string) {
         length: value.length,
         value,
         token: [] as string[],
-        eos: false,
+        eos: 0 >= value.length,
         char: value[0],
         type: getTokenType(value[0])
     };
