@@ -100,6 +100,7 @@ export class Operator extends Token {
         public start: number,
         public end: number,
         public operator: string,
+        public implicit = false
     ) {
         super(TokenType.Operator, start, end);
     }
@@ -135,7 +136,7 @@ export class FunctionExpression extends Token {
         public start: number,
         public end: number,
         public callee: Identifier,
-        public args: Token[][] = []
+        public args: Token[] = []
     ) {
         super(TokenType.FunctionExpression, start, end);
     }

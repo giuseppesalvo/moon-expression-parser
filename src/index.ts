@@ -7,7 +7,6 @@ import { parse } from './parser';
 import util from 'util';
 
 /*
-export * from './ast';
 export * from './parser';
 export * from './evaluate';
 */
@@ -17,7 +16,3 @@ export function compile(input: string) {
     const ast = parse(tokens);
     return ast;
 }
-
-console.log(
-    util.inspect(compile("sin ( max ( 2, 3 ) / 3 * PI )"), { depth: null })
-);

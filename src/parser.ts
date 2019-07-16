@@ -1,10 +1,10 @@
-import { tokenize, Token, TokenType, AssocDir, AST } from '../src';
+import { tokenize, Token, TokenType, AssocDir } from '../src';
 import { peek } from './utils'; 
 import { BinaryExpression, FunctionExpression, Identifier, LeftParentesis, Operator } from './token';
 
 export function parse(
     tokens: Token[],
-): Token[][] {
+): Token[] {
     
     const outputAsts: Token[][] = []
 
@@ -130,6 +130,16 @@ export function parse(
 
         if ( state.token.type === TokenType.Identifier ) {
             
+            // Checking for implicit multiplication between literals and identifiers
+            const prevT = prevToken();
+            if ( prevT && prevT.type === TokenType.Literal ) {
+                opStack.push(
+                    new Operator(
+                        prevT.start, state.token.end, "*", true
+                    )
+                )
+            }
+
             // Function check
             const nextT = nextToken();
             if ( nextT && nextT.type === TokenType.LeftParentesis ) {
@@ -223,5 +233,6 @@ export function parse(
 
     closeAst();
 
-    return outputAsts;
+    // Returning heads only
+    return outputAsts.map(v => v[0]);
 }
