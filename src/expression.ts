@@ -2,17 +2,38 @@ import { tokenize } from './tokenizer';
 import { parse } from './parser';
 import { evaluate } from './evaluate';
 
-interface Options {
-    variables?: Record<string, number>
-    functions: Record<string, (args: number[]) => number[]>
-}
+import {
+    ExpressionContext,
+    Functions,
+    Variables
+} from './types';
 
-export function expression(input: string, options?: Options): (number|undefined)[] {
-    const tokens = tokenize(input);
-    const asts = parse(tokens);
-    return asts.map(a => evaluate(a));
-}
+export class Expression {
 
-console.log(
-    "result: ", expression("1 + 2, 1 # ciao uomo come stai")
-);
+    public context: ExpressionContext = {
+        variables: {},
+        functions: {}
+    }
+
+    constructor(
+        variables: Variables = {},
+        functions: Functions = {}
+    ) {
+        Object.assign(this.context.variables, variables);
+        Object.assign(this.context.functions, functions);
+    }
+
+    evaluate(input: string): (number|undefined)[] {
+        const tokens = tokenize(input);
+        const asts = parse(tokens);
+        return asts.map(a => evaluate(a, this.context));
+    }
+
+    addVariables(variables: Variables) {
+        Object.assign(this.context.variables, variables);
+    }
+
+    addFunctions(functions: Functions) {
+        Object.assign(this.context.functions, functions);
+    }
+}

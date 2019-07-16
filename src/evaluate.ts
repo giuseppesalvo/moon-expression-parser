@@ -6,13 +6,11 @@ import {
     FunctionExpression,
     Identifier
 } from './token';
-import { parse } from './parser';
+import {
+    ExpressionContext
+} from './types';
 
-const variables: Record<string,number|undefined> = {
-    "PI": Math.PI
-};
-
-export function evaluateNode(node: Token): number|undefined {
+export function evaluateNode(node: Token, ctx: ExpressionContext): number|undefined {
 
     if ( !node ) {
         return;
@@ -24,15 +22,13 @@ export function evaluateNode(node: Token): number|undefined {
 
         const exp = node as BinaryExpression;
 
-        const left = evaluateNode(exp.left);
-        const right = evaluateNode(exp.right);
-
-        console.log(left, right)
+        const left = evaluateNode(exp.left, ctx);
+        const right = evaluateNode(exp.right, ctx);
 
         if ( typeof left === "undefined" && exp.operator.value === "=" ) {
             if ( exp.left.type === TokenType.Identifier ) {
                 const identifier = exp.left as Identifier;
-                variables[identifier.name] = right;
+                ctx.variables[identifier.name] = right;
             }
             return right;
         }
@@ -56,22 +52,25 @@ export function evaluateNode(node: Token): number|undefined {
             case "=": {
                 if ( exp.left.type === TokenType.Identifier ) {
                     const identifier = exp.left as Identifier;
-                    variables[identifier.name] = right;
+                    ctx.variables[identifier.name] = right;
                 }
                 return right;
             };
         }
     } else if ( node.type === TokenType.FunctionExpression ) {
         const fn = node as FunctionExpression;
-        const args = fn.args.map(arg => evaluateNode(arg));
-        const M = Math as any;
-        return M[fn.callee.name](...args);
+        if ( ctx.functions.hasOwnProperty(fn.callee.name) ) {
+            const args = fn.args.map(arg => evaluateNode(arg, ctx));
+            return ctx.functions[fn.callee.name](args);
+        } else {
+            return;
+        }
     } else if ( node.type === TokenType.Identifier ) {
         const identifier = node as Identifier;
-        return variables[identifier.name];
+        return ctx.variables[identifier.name];
     }
 }
 
-export function evaluate(head: Token): number|undefined {
-    return evaluateNode(head);
+export function evaluate(head: Token, context: ExpressionContext): number|undefined {
+    return evaluateNode(head, context);
 }

@@ -93,7 +93,6 @@ export function tokenize(input: string) {
         skipWhitespaces();
 
         if ( state.type === TokenType.Comment ) {
-            console.log("Comment!")
             tokens.push(
                 new Comment(
                     state.index,
