@@ -28,4 +28,13 @@ describe("expression", () => {
         ]);
     })
 
+    it("3 + 4 * 2 + ( 100 - ( 5 * 4 ^ 2 ) + 20 / 2 ) ^ 2 ^ 3", () => {
+
+        const exp = new Expression();
+        const result = exp.evaluate("3 + 4 * 2 + ( 100 - ( 5 * 4 ^ 2 ) + 20 / 2 ) ^ 2 ^ 3");
+
+        expect(result)
+        .toEqual([656100000011]);
+    })
+
 });
