@@ -99,6 +99,18 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar to
 
 /***/ }),
 
+/***/ "./src/expression.ts":
+/*!***************************!*\
+  !*** ./src/expression.ts ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar tokenizer_1 = __webpack_require__(/*! ./tokenizer */ \"./src/tokenizer.ts\");\nvar parser_1 = __webpack_require__(/*! ./parser */ \"./src/parser.ts\");\nvar evaluate_1 = __webpack_require__(/*! ./evaluate */ \"./src/evaluate.ts\");\nfunction expression(input, options) {\n    var tokens = tokenizer_1.tokenize(input);\n    var asts = parser_1.parse(tokens);\n    return asts.map(function (a) { return evaluate_1.evaluate(a); });\n}\nexports.expression = expression;\nconsole.log(\"result: \", expression(\"1 + 2, 1 # ciao uomo come stai\"));\n\n\n//# sourceURL=webpack://Moon/./src/expression.ts?");
+
+/***/ }),
+
 /***/ "./src/index.ts":
 /*!**********************!*\
   !*** ./src/index.ts ***!
@@ -107,7 +119,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar to
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nfunction __export(m) {\n    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];\n}\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__export(__webpack_require__(/*! ./token */ \"./src/token.ts\"));\n__export(__webpack_require__(/*! ./tokenizer */ \"./src/tokenizer.ts\"));\n__export(__webpack_require__(/*! ./parser */ \"./src/parser.ts\"));\n__export(__webpack_require__(/*! ./evaluate */ \"./src/evaluate.ts\"));\nvar tokenizer_1 = __webpack_require__(/*! ./tokenizer */ \"./src/tokenizer.ts\");\nvar parser_1 = __webpack_require__(/*! ./parser */ \"./src/parser.ts\");\nvar evaluate_1 = __webpack_require__(/*! ./evaluate */ \"./src/evaluate.ts\");\nfunction compile(input, options) {\n    var tokens = tokenizer_1.tokenize(input);\n    var asts = parser_1.parse(tokens);\n    return asts.map(function (a) { return evaluate_1.evaluate(a); });\n}\nexports.compile = compile;\nconsole.log(\"result: \", compile(\"1 + 2, 1 # ciao uomo come stai\"));\n\n\n//# sourceURL=webpack://Moon/./src/index.ts?");
+eval("\nfunction __export(m) {\n    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];\n}\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__export(__webpack_require__(/*! ./token */ \"./src/token.ts\"));\n__export(__webpack_require__(/*! ./tokenizer */ \"./src/tokenizer.ts\"));\n__export(__webpack_require__(/*! ./parser */ \"./src/parser.ts\"));\n__export(__webpack_require__(/*! ./evaluate */ \"./src/evaluate.ts\"));\n__export(__webpack_require__(/*! ./expression */ \"./src/expression.ts\"));\n\n\n//# sourceURL=webpack://Moon/./src/index.ts?");
 
 /***/ }),
 
