@@ -14,6 +14,10 @@ const variables: Record<string,number|undefined> = {
 
 export function evaluateNode(node: Token): number|undefined {
 
+    if ( !node ) {
+        return;
+    }
+
     if ( node.type === TokenType.Literal ) {
         return (node as Literal).value;
     } else if ( node.type === TokenType.BinaryExpression )  {

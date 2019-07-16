@@ -12,15 +12,12 @@ interface Options {
     functions: Record<string, (args: number[]) => number[]>
 }
 
-export function compile(input: string, options?: Options): (number|undefined)[][] {
-    const lines = input.split("\n")
-    return lines.map(line => {
-        const tokens = tokenize(line);
-        const asts = parse(tokens);
-        return asts.map(a => evaluate(a));
-    })
+export function compile(input: string, options?: Options): (number|undefined)[] {
+    const tokens = tokenize(input);
+    const asts = parse(tokens);
+    return asts.map(a => evaluate(a));
 }
 
 console.log(
-    "result: ", compile("1 + 2")
+    "result: ", compile("1 + 2, 1 # ciao uomo come stai")
 );

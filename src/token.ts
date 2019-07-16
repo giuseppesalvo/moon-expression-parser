@@ -7,7 +7,8 @@ export enum TokenType {
     BinaryExpression = "BinaryExpression",
     LeftParentesis = "LeftParentesis",
     RightParentesis = "RightParentesis",
-    FunctionExpression = "FunctionExpression"
+    FunctionExpression = "FunctionExpression",
+    Comment = "Comment"
 }
 
 export enum AssocDir {
@@ -41,13 +42,23 @@ export abstract class Token {
     ) {}
 }
 
+export class Comment extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public content: string,
+    ) {
+        super(TokenType.Comment, start, end);
+    }
+}
+
 export class LeftParentesis extends Token {
     constructor(
         public start: number,
         public end: number,
         public char: string,
     ) {
-        super(TokenType.LeftParentesis, start, end)
+        super(TokenType.LeftParentesis, start, end);
     }
 }
 
@@ -57,7 +68,7 @@ export class RightParentesis extends Token {
         public end: number,
         public char: string,
     ) {
-        super(TokenType.RightParentesis, start, end)
+        super(TokenType.RightParentesis, start, end);
     }
 }
 
@@ -68,7 +79,7 @@ export class CharToken extends Token {
         public end: number,
         public char: string,
     ) {
-        super(type, start, end)
+        super(type, start, end);
     }
 }
 
@@ -177,6 +188,10 @@ export const TokenTestMap: TokenTestMap = {
     [TokenType.Whitespace]: { 
         type: TokenType.Whitespace,
         test: (char: string) => char === " ",
+    },
+    [TokenType.Comment]: { 
+        type: TokenType.Comment,
+        test: (char: string) => char === "#",
     }
 }
 

@@ -30,7 +30,7 @@ export function parse(
     function next() {
         state.index += 1;
         state.token = tokens[state.index];
-        state.end = state.index === tokens.length;
+        state.end = state.index >= tokens.length;
     }
 
     function goTo(index: number) {
@@ -73,7 +73,6 @@ export function parse(
 
     function parseFunction() {
         const identifier = state.token;
-        const nextT = nextToken() as LeftParentesis;
         const rightIndex = findRightParentesisIndex(state.index+1);
 
         if ( rightIndex < 0 ) {
@@ -111,14 +110,22 @@ export function parse(
                 )
             }
         }
-        outputAsts.push(
-            outAst
-        );
+        if ( outAst.length > 0 ) {
+            outputAsts.push(
+                outAst
+            );
+        }
         outAst = [];
         opStack = [];
     }
 
     function parseAst() {
+
+        if ( state.token.type === TokenType.Comment ) {
+            goTo(tokens.length);
+            closeAst();
+            return;
+        }
 
         if ( state.token.type === TokenType.Comma ) {
             closeAst();

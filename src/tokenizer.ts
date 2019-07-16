@@ -8,6 +8,7 @@ import {
     Operator,
     LeftParentesis,
     RightParentesis,
+    Comment
 } from './token';
 
 export function tokenize(input: string) {
@@ -27,9 +28,16 @@ export function tokenize(input: string) {
 
     function next() {
         state.index += 1;
-        state.eos = state.index === value.length;
+        state.eos = state.index >= value.length;
         state.char = value[state.index]
         state.type = getTokenType(value[state.index])
+    }
+
+    function goTo(index: number) {
+        state.index = index;
+        state.eos = index >= value.length;
+        state.char = value[index]
+        state.type = getTokenType(value[index])
     }
 
     function skipWhitespaces() {
@@ -83,6 +91,19 @@ export function tokenize(input: string) {
         checkTokenValidity();
 
         skipWhitespaces();
+
+        if ( state.type === TokenType.Comment ) {
+            console.log("Comment!")
+            tokens.push(
+                new Comment(
+                    state.index,
+                    input.length,
+                    input.substr(state.index)
+                )
+            )
+            goTo(value.length);
+            return;
+        }
 
         if ( state.type === TokenType.Literal ) {
             parseLiteral();
