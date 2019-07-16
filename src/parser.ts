@@ -41,21 +41,51 @@ export function parse(
         return tokens[state.index + 1];
     }
 
+    function findRightParentesisIndex(leftParentesisIndex: number): number {
+        let index = leftParentesisIndex;
+        let deep = 0;
+        while ( index < tokens.length ) {
+
+            const token = tokens[index];
+            
+            if ( token.type === TokenType.LeftParentesis ) {
+                deep += 1;
+            }
+            if ( token.type === TokenType.RightParentesis ) {
+                deep -= 1;
+            }
+
+            if ( deep === 0 ) {
+                return index;
+            }
+
+            index += 1;
+        }
+
+        return -1;
+    }
+
     function parseFunction() {
         const identifier = state.token;
         const nextT = nextToken() as LeftParentesis;
+        const rightIndex = findRightParentesisIndex(state.index+1);
+
+        if ( rightIndex < 0 ) {
+            throw new Error('Mismatched parentesis');
+        }
+
         const argsTokens = tokens.slice(
-            state.index+1,
-            nextT.endIndex
+            state.index+2,
+            rightIndex
         );
         const fn = new FunctionExpression(
             identifier.start,
-            nextT.endIndex+1,
+            tokens[rightIndex].end+1,
             identifier as Identifier,
             parse(argsTokens),
         );
         opStack.push(fn);
-        goTo(nextT.endIndex+1);
+        goTo(rightIndex+1);
     }
 
     function closeAst() {
@@ -66,7 +96,7 @@ export function parse(
                 const left = outAst.pop() as Token;
                 outAst.push(
                     new BinaryExpression(
-                        -1, -1, top as Operator, right, left,
+                        left.start, right.end, top as Operator, left, right,
                     )
                 )
             } else if ( top.type === TokenType.FunctionExpression ) {
@@ -99,11 +129,14 @@ export function parse(
         }
 
         if ( state.token.type === TokenType.Identifier ) {
+            
+            // Function check
             const nextT = nextToken();
-            if ( nextT.type === TokenType.LeftParentesis ) {
+            if ( nextT && nextT.type === TokenType.LeftParentesis ) {
                 parseFunction();
                 return;
             }
+
             outAst.push(
                 state.token
             );
@@ -120,13 +153,19 @@ export function parse(
                 || (o.type === TokenType.Operator && (o as Operator).precedence() > (token as Operator).precedence())
                 || o.type === TokenType.Operator && (o as Operator).precedence() === (token as Operator).precedence() && (o as Operator).associativity() === AssocDir.left )
             ) {
-                const right = outAst.pop();
-                const left = outAst.pop();
-                outAst.push(
-                    new BinaryExpression(
-                        -1,-1, o as Operator, right, left,
+                if ( o.type === TokenType.Operator ) {
+                    const right = outAst.pop() as Token;
+                    const left = outAst.pop() as Token;
+                    outAst.push(
+                        new BinaryExpression(
+                            left.start, right.end, o as Operator, left, right
+                        )
                     )
-                )
+                } else if ( o.type === TokenType.FunctionExpression ) {
+                    outAst.push(
+                        o
+                    )
+                }
                 opStack.pop();
                 o = peek(opStack);
             }
@@ -147,19 +186,25 @@ export function parse(
 
         if ( state.token.type === TokenType.RightParentesis ) {
             let op = peek(opStack);
-            while ( op.type !== TokenType.LeftParentesis ) {
-                const right = outAst.pop();
-                const left = outAst.pop();
-                outAst.push(
-                    new BinaryExpression(
-                        -1,-1, op as Operator, right, left,
+            while ( op && op.type !== TokenType.LeftParentesis ) {
+                if ( op.type === TokenType.Operator ) {
+                    const right = outAst.pop() as Token;
+                    const left = outAst.pop() as Token;
+                    outAst.push(
+                        new BinaryExpression(
+                            left.start, right.end, op as Operator, left, right
+                        )
                     )
-                )
-                opStack.pop()
+                } else if ( op.type === TokenType.FunctionExpression ) {
+                    outAst.push(
+                        op
+                    )
+                }
+                console.log(opStack.pop())
                 op = peek(opStack);
             }
 
-            if ( op.type === TokenType.LeftParentesis ) {
+            if ( op && op.type === TokenType.LeftParentesis ) {
                 opStack.pop()
             } else {
                 throw new Error('Mismatched parentesis');

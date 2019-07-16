@@ -14,8 +14,6 @@ export function tokenize(input: string) {
 
     const tokens: Token[] = [];
     const value = input.split("");
-
-    const parentesisBuffer: Array<{index: number, token: LeftParentesis }> = [];
     
     const state = {
         index: 0,
@@ -97,38 +95,24 @@ export function tokenize(input: string) {
         }
 
         if ( state.type === TokenType.LeftParentesis ) {
-                const parentesis = new LeftParentesis(
-                    state.index,
-                    state.index+1,
-                    state.char,
-                    -1
-                )
-                parentesisBuffer.push({
-                    index: tokens.length,
-                    token: parentesis
-                })
                 tokens.push(
-                    parentesis
+                    new LeftParentesis(
+                        state.index,
+                        state.index+1,
+                        state.char,
+                    )
                 )
                 next();
                 return;
         }
 
         if ( state.type === TokenType.RightParentesis ) {
-            const leftParentesis = parentesisBuffer.pop()
-            if ( !leftParentesis ) {
-                throw new Error('Mismatched parentesis');
-                return;
-            }
-            leftParentesis.token.endIndex = tokens.length;
-            const parentesis = new RightParentesis(
-                state.index,
-                state.index+1,
-                state.char,
-                leftParentesis.index
-            )
             tokens.push(
-                parentesis
+                new RightParentesis(
+                    state.index,
+                    state.index+1,
+                    state.char,
+                )
             )
             next();
             return;

@@ -19,5 +19,5 @@ export function compile(input: string) {
 }
 
 console.log(
-    util.inspect(compile("max(1, 2, 5, 5, 5 + 10)"), { depth: null })
+    util.inspect(compile("sin ( max ( 2, 3 ) / 3 * PI )"), { depth: null })
 );

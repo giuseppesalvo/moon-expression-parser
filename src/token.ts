@@ -46,7 +46,6 @@ export class LeftParentesis extends Token {
         public start: number,
         public end: number,
         public char: string,
-        public endIndex: number,
     ) {
         super(TokenType.LeftParentesis, start, end)
     }
@@ -57,7 +56,6 @@ export class RightParentesis extends Token {
         public start: number,
         public end: number,
         public char: string,
-        public startIndex: number
     ) {
         super(TokenType.RightParentesis, start, end)
     }
