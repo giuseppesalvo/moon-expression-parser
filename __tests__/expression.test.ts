@@ -1,6 +1,9 @@
 import {
     Expression,
+    parse,
+    tokenize
 } from '../src';
+import util from 'util';
 
 describe("expression", () => {
     it("1 + 2", () => {
@@ -139,6 +142,24 @@ describe("expression", () => {
         const exp = new Expression();
         const result = exp.evaluate("hello man how are you");
         expect(result).toEqual([ undefined ]);
+    })
+
+    it("negative exponents: 2 ^ -10", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("2 ^ -10");
+        expect(result).toEqual([ 0.0009765625 ]);
+    })
+
+    it("negative power: -2 ^ 4", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("-2 ^ 4");
+        expect(result).toEqual([ -16 ]);
+    })
+
+    it("negative power with negative exp: -2 ^ -4", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("-2 ^ -4");
+        expect(result).toEqual([ -0.0625 ]);
     })
 
 });

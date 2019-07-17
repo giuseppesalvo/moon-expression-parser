@@ -186,11 +186,13 @@ export function parse(
         if ( state.token.type === TokenType.Operator ) {
             let o = peek(opStack);
             const token = state.token;
+
             while (
                 o &&
                 (o.type === TokenType.FunctionExpression
-                || (o.type === TokenType.Operator && (o as Operator).precedence() > (token as Operator).precedence())
-                || o.type === TokenType.Operator && (o as Operator).precedence() === (token as Operator).precedence() && (o as Operator).associativity() === AssocDir.left && !(o as Operator).unary )
+                || (o.type === TokenType.Operator && (o as Operator).precedence() > (token as Operator).precedence() && !(token as Operator).unary)
+                || (o.type === TokenType.Operator && (o as Operator).precedence() === (token as Operator).precedence() && (o as Operator).associativity() === AssocDir.left && !(o as Operator).unary )
+                )
             ) {
                 if ( o.type === TokenType.Operator ) {
                     addExpression(
