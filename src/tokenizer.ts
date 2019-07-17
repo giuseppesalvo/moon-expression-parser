@@ -10,6 +10,7 @@ import {
     RightParentesis,
     Comment
 } from './token';
+import { peek } from './utils';
 
 export function tokenize(input: string) {
 
@@ -87,7 +88,7 @@ export function tokenize(input: string) {
     }
 
     function parseToken() {
-        
+
         checkTokenValidity();
 
         skipWhitespaces();
@@ -152,11 +153,17 @@ export function tokenize(input: string) {
         }
 
         if ( state.type === TokenType.Operator ) {
+            const prev = peek(tokens);
             tokens.push(
                 new Operator(
                     state.index,
                     state.index+1,
-                    state.char
+                    state.char,
+                    false,
+                    !prev ||
+                        ( prev.type === TokenType.Operator
+                        || prev.type == TokenType.LeftParentesis
+                        || prev.type == TokenType.Comma )
                 )
             )
             next();

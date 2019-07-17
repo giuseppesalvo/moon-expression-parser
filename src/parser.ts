@@ -4,7 +4,8 @@ import {
     BinaryExpression,
     FunctionExpression,
     Identifier,
-    Operator
+    Operator,
+    UnaryExpression
 } from './token';
 
 export function parse(
@@ -92,16 +93,32 @@ export function parse(
         goTo(rightIndex+1);
     }
 
+    function addExpression(operator: Operator) {
+
+        if ( operator.unary ) {
+            const right = outAst.pop() as Token
+            outAst.push(
+                new UnaryExpression(
+                    operator.start, right.end, operator, right,
+                )
+            )
+        } else {
+            const right = outAst.pop() as Token
+            const left = outAst.pop() as Token
+            outAst.push(
+                new BinaryExpression(
+                    left.start, right.end, operator, left, right,
+                )
+            )
+        }
+    }
+
     function closeAst() {
         while ( opStack.length > 0 ) {
-            let top = opStack.pop() as Operator|FunctionExpression; // It will never be undefined
+            let top = opStack.pop() as Operator|FunctionExpression; // It will be never undefined
             if ( top.type === TokenType.Operator ) {
-                const right = outAst.pop() as Token;
-                const left = outAst.pop() as Token;
-                outAst.push(
-                    new BinaryExpression(
-                        left.start, right.end, top as Operator, left, right,
-                    )
+                addExpression(
+                    top as Operator,
                 )
             } else if ( top.type === TokenType.FunctionExpression ) {
                 outAst.push(
@@ -173,15 +190,11 @@ export function parse(
                 o &&
                 (o.type === TokenType.FunctionExpression
                 || (o.type === TokenType.Operator && (o as Operator).precedence() > (token as Operator).precedence())
-                || o.type === TokenType.Operator && (o as Operator).precedence() === (token as Operator).precedence() && (o as Operator).associativity() === AssocDir.left )
+                || o.type === TokenType.Operator && (o as Operator).precedence() === (token as Operator).precedence() && (o as Operator).associativity() === AssocDir.left && !(o as Operator).unary )
             ) {
                 if ( o.type === TokenType.Operator ) {
-                    const right = outAst.pop() as Token;
-                    const left = outAst.pop() as Token;
-                    outAst.push(
-                        new BinaryExpression(
-                            left.start, right.end, o as Operator, left, right
-                        )
+                    addExpression(
+                        o as Operator,
                     )
                 } else if ( o.type === TokenType.FunctionExpression ) {
                     outAst.push(
@@ -210,12 +223,8 @@ export function parse(
             let op = peek(opStack);
             while ( op && op.type !== TokenType.LeftParentesis ) {
                 if ( op.type === TokenType.Operator ) {
-                    const right = outAst.pop() as Token;
-                    const left = outAst.pop() as Token;
-                    outAst.push(
-                        new BinaryExpression(
-                            left.start, right.end, op as Operator, left, right
-                        )
+                    addExpression(
+                        op as Operator,
                     )
                 } else if ( op.type === TokenType.FunctionExpression ) {
                     outAst.push(

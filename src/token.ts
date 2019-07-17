@@ -4,6 +4,7 @@ export enum TokenType {
     Literal = "Literal",
     Identifier = "Identifier",
     Operator = "Operator",
+    UnaryExpression = "UnaryExpression",
     BinaryExpression = "BinaryExpression",
     LeftParentesis = "LeftParentesis",
     RightParentesis = "RightParentesis",
@@ -26,12 +27,17 @@ const Assoc: Record<string, AssocDir> = {
 };
 
 const PrecedenceMap: Record<string, number> = {
-    "^" : 4, 
+    "^" : 5, 
     "*" : 3, 
     "/" : 3, 
     "+" : 2, 
     "-" : 2,
-    "=" : 1,
+    "=" : 6,
+};
+
+const UnaryPrecedenceMap: Record<string, number> = {
+    "+" : 4, 
+    "-" : 4, 
 };
 
 export abstract class Token {
@@ -93,6 +99,17 @@ export class Identifier extends Token {
     }
 }
 
+export class UnaryExpression extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public operator: Operator,
+        public argument: Token,
+    ) {
+        super(TokenType.UnaryExpression, start, end);
+    }
+}
+
 export class BinaryExpression extends Token {
     constructor(
         public start: number,
@@ -105,19 +122,23 @@ export class BinaryExpression extends Token {
     }
 }
 
-
 export class Operator extends Token {
     constructor(
         public start: number,
         public end: number,
         public value: string,
-        public implicit = false
+        public implicit = false,
+        public unary = false,
     ) {
         super(TokenType.Operator, start, end);
     }
 
     precedence(): number {
-        return PrecedenceMap[this.value];
+        if ( this.unary ) {
+            return UnaryPrecedenceMap[this.value];
+        } else {
+            return PrecedenceMap[this.value];
+        }
     }
 
     associativity(): AssocDir {

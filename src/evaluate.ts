@@ -4,7 +4,8 @@ import {
     Literal,
     BinaryExpression,
     FunctionExpression,
-    Identifier
+    Identifier,
+    UnaryExpression
 } from './token';
 import {
     ExpressionContext
@@ -18,6 +19,20 @@ export function evaluateNode(node: Token, ctx: ExpressionContext): number|undefi
 
     if ( node.type === TokenType.Literal ) {
         return (node as Literal).value;
+    } else if ( node.type === TokenType.UnaryExpression ) {
+
+        const exp = node as UnaryExpression;
+        const arg = evaluateNode(exp.argument, ctx);
+
+        if ( typeof arg === "undefined" ) {
+            return;
+        }
+
+        switch(exp.operator.value) {
+            case "+": return arg;
+            case "-": return -arg;
+        }
+
     } else if ( node.type === TokenType.BinaryExpression )  {
 
         const exp = node as BinaryExpression;

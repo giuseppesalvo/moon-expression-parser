@@ -1,15 +1,52 @@
 import {
-    Expression
+    Expression,
 } from '../src';
 
 describe("expression", () => {
-
     it("1 + 2", () => {
         const exp = new Expression();
         const result = exp.evaluate("1 + 2");
         expect(result).toEqual([ 3 ]);
     })
 
+    it("1 + --+2", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("1 + --+2");
+        expect(result).toEqual([ 3 ]);
+    })
+
+    it("1 + -+-2", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("1 + -+-2");
+        expect(result).toEqual([ 3 ]);
+    })
+
+    it("1 +-+-+-----+-+-+ 1 + (1+2+2 * -4^ 2) + -(1*-+-2)", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("1 +-+-+-----+-+-+ 1 + (1+2+2 * -4^ 2) + -(1*-+-2)");
+        expect(result).toEqual([ -31 ]);
+    })
+
+    it("1 +-+-+-----+-+-+ 1 + (1+2+2) + -(1*-+-2)", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("1 +-+-+-----+-+-+ 1 + (1+2+2) + -(1*-+-2)");
+        expect(result).toEqual([ 3 ]);
+    })
+
+    it("1 +-+-+-----+-+-+ 1 + (1+2+2)", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("1 +-+-+-----+-+-+ 1 + (1+2+2)");
+        expect(result).toEqual([ 5 ]);
+    })
+
+    it("1 + -6pow(2,2)", () => {
+        const exp = new Expression({},{
+            pow: (args: Array<number|undefined>) => Math.pow(args[0] as number, args[1] as number)
+        });
+        const result = exp.evaluate("1 + -6pow(2,2)");
+        expect(result).toEqual([ -23 ]);
+    })
+    
     it("sin(10) + 0.1 + PI", () => {
 
         const exp = new Expression(
@@ -84,6 +121,18 @@ describe("expression", () => {
 
         expect(result)
         .toEqual([81]);
+    })
+
+    it("2 * a = 3", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("2 * a = 3");
+        expect(result).toEqual([ 6 ]);
+    })
+
+    it("2 ^ a = 3", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("2 ^ a = 3");
+        expect(result).toEqual([ 8 ]);
     })
 
 });
