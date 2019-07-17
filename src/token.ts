@@ -9,7 +9,8 @@ export enum TokenType {
     LeftParentesis = "LeftParentesis",
     RightParentesis = "RightParentesis",
     FunctionExpression = "FunctionExpression",
-    Comment = "Comment"
+    Comment = "Comment",
+    Unit = "Unit"
 }
 
 export enum AssocDir {
@@ -50,6 +51,16 @@ export abstract class Token {
         public start: number,
         public end: number
     ) {}
+}
+
+export class Unit extends Token {
+    constructor(
+        public start: number,
+        public end: number,
+        public value: string,
+    ) {
+        super(TokenType.Unit, start, end);
+    }
 }
 
 export class Comment extends Token {
@@ -160,7 +171,8 @@ export class Literal extends Token {
     constructor(
         public start: number,
         public end: number,
-        public raw: string
+        public raw: string,
+        public unit?: Unit
     ) {
         super(TokenType.Literal, start, end);
         this.value = parseFloat(raw);
@@ -200,7 +212,7 @@ export const TokenTestMap: TokenTestMap = {
     },
     [TokenType.Operator]: { 
         type: TokenType.Operator,
-        test: (char: string) => /(\+|\-|\*|\/|\^|=|of|times)/.test(char),
+        test: (char: string) => /^(\+|\-|\*|\/|\^|=|of|times)$/.test(char),
     },
     [TokenType.LeftParentesis]: { 
         type: TokenType.LeftParentesis,
@@ -217,7 +229,11 @@ export const TokenTestMap: TokenTestMap = {
     [TokenType.Comment]: { 
         type: TokenType.Comment,
         test: (char: string) => char === "#",
-    }
+    },
+    [TokenType.Unit]: { 
+        type: TokenType.Unit,
+        test: (char: string) => /^(%|cm|m|mm)$/.test(char),
+    },
 }
 
 export function getTokenType(input: string): TokenType|null {

@@ -1,5 +1,13 @@
-export type Variables = Record<string, number|undefined>;
-export type Functions = Record<string, (args: Array<number|undefined>) => number|undefined>;
+import {
+    Unit
+} from './token'
+
+export type ENumber = {
+    value: number|undefined,
+    unit?: Unit
+}
+export type Variables = Record<string, ENumber>;
+export type Functions = Record<string, (args: Array<ENumber>) => ENumber>;
 
 export interface ExpressionContext {
     variables: Variables

@@ -1,6 +1,8 @@
 # TODO
 
 [] Add units
-[] Multiple characters operators
+[x] Multiple characters operators
+[x] Parse unary operator
 [] Visitors Pattern in AST
-[] Parse unary operator
+[] Improve general code structure
+[] Add extensive tests

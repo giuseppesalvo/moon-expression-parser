@@ -9,7 +9,8 @@ import {
     LeftParentesis,
     RightParentesis,
     Comment,
-    TokenTestMap
+    TokenTestMap,
+    Unit
 } from './token';
 import { peek } from './utils';
 
@@ -83,6 +84,14 @@ export function tokenize(input: string) {
             if ( TokenTestMap[TokenType.Operator].test(str) ) {
                 tokens.push(
                     new Operator(
+                        state.index - state.token.length,
+                        state.index,
+                        str
+                    )
+                );
+            } else if ( TokenTestMap[TokenType.Unit].test(str) ) {
+                tokens.push(
+                    new Unit(
                         state.index - state.token.length,
                         state.index,
                         str

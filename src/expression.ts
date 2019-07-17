@@ -4,7 +4,8 @@ import { evaluate } from './evaluate';
 import {
     ExpressionContext,
     Functions,
-    Variables
+    Variables,
+    ENumber
 } from './types';
 
 export class Expression {
@@ -22,7 +23,7 @@ export class Expression {
         this.addFunctions(functions);
     }
 
-    evaluate(input: string): (number|undefined)[] {
+    evaluate(input: string): ENumber[] {
         const tokens = tokenize(input);
         const asts = parse(tokens);
         return asts.map(a => evaluate(a, this.context));
