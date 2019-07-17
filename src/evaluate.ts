@@ -24,7 +24,7 @@ export function evaluateNode(node: Token|undefined, ctx: ExpressionContext): ENu
         const literal = (node as Literal);
         return {
             value: literal.value,
-            unit: literal.unit
+            unit: literal.unit ? literal.unit.value : undefined
         };
     } else if ( node.type === TokenType.UnaryExpression ) {
 
@@ -39,6 +39,7 @@ export function evaluateNode(node: Token|undefined, ctx: ExpressionContext): ENu
             case "+": return arg;
             case "-": return {
                 value: -arg.value,
+                unit: arg.unit
             };
         }
 
@@ -70,24 +71,31 @@ export function evaluateNode(node: Token|undefined, ctx: ExpressionContext): ENu
         switch(exp.operator.value) {
             case "+": return {
                 value: left.value + right.value,
+                unit: left.unit || right.unit
             }
             case "-": return {
                 value: left.value - right.value,
+                unit: left.unit || right.unit
             }
             case "*": return {
                 value: left.value * right.value,
+                unit: left.unit || right.unit
             }
             case "times": return {
-                value: left.value * right.value
+                value: left.value * right.value,
+                unit: left.unit || right.unit
             }
             case "of": return {
-                value: left.value * (right.value/100)
+                value: left.value * (right.value/100),
+                unit: left.unit || right.unit
             }
             case "/": return {
-                value: left.value / right.value
+                value: left.value / right.value,
+                unit: left.unit || right.unit
             }
             case "^": return {
-                value: left.value ** right.value
+                value: left.value ** right.value,
+                unit: left.unit || right.unit
             }
             case "=": {
                 if ( exp.left.type === TokenType.Identifier ) {

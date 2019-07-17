@@ -1,6 +1,7 @@
 # TODO
 
-[] Add units
+[x] Add units structure
+[] Units conversions
 [x] Multiple characters operators
 [x] Parse unary operator
 [] Visitors Pattern in AST

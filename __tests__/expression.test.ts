@@ -187,10 +187,28 @@ describe("expression", () => {
         expect(result).toEqual([{ value:  8 }]);
     })
 
-    it("20 of 150", () => {
+    it("4 + ( 1 * 2cm)", () => {
         const exp = new Expression();
-        const result = exp.evaluate("20 of 150");
-        expect(result).toEqual([{ value:  30 }]);
+        const result = exp.evaluate("4 + ( 1 * 2cm)");
+        expect(result).toEqual([{ value: 6, unit: "cm" }]);
+    })
+
+    it("4 + multBy2(1 * 2cm)", () => {
+        const exp = new Expression({}, {
+            "multBy2": (arg: Array<ENumber>) => ({
+                value: (arg[0].value as number) * 2,
+                unit: arg[0].unit
+            })
+        });
+        const result = exp.evaluate("4 + multBy2( 1 * 2cm)");
+        expect(result).toEqual([{ value: 8, unit: "cm" }]);
+    })
+    
+    // It works without a conversion
+    it("4mm + (1 * 2cm)", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("4mm + ( 1 * 2cm)");
+        expect(result).toEqual([{ value: 6, unit: "mm" }]);
     })
 
 });

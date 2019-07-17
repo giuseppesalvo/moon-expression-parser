@@ -172,7 +172,7 @@ export class Literal extends Token {
         public start: number,
         public end: number,
         public raw: string,
-        public unit?: Unit
+        public unit?: Unit,
     ) {
         super(TokenType.Literal, start, end);
         this.value = parseFloat(raw);
@@ -232,7 +232,7 @@ export const TokenTestMap: TokenTestMap = {
     },
     [TokenType.Unit]: { 
         type: TokenType.Unit,
-        test: (char: string) => /^(%|cm|m|mm)$/.test(char),
+        test: (char: string) => /^(cm|m|mm)$/.test(char),
     },
 }
 

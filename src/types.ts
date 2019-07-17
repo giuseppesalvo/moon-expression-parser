@@ -4,7 +4,7 @@ import {
 
 export type ENumber = {
     value: number|undefined,
-    unit?: Unit
+    unit?: string
 }
 export type Variables = Record<string, ENumber>;
 export type Functions = Record<string, (args: Array<ENumber>) => ENumber>;

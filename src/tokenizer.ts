@@ -90,13 +90,18 @@ export function tokenize(input: string) {
                     )
                 );
             } else if ( TokenTestMap[TokenType.Unit].test(str) ) {
-                tokens.push(
-                    new Unit(
-                        state.index - state.token.length,
-                        state.index,
-                        str
-                    )
-                );
+                const lastToken = peek(tokens);
+                const unit = new Unit(
+                    state.index - state.token.length,
+                    state.index,
+                    str
+                )
+                if ( lastToken.type === TokenType.Literal ) {
+                    (lastToken as Literal).unit = unit;
+                } else {
+                    tokens.push(unit);
+                }
+                
             } else {
                 tokens.push(
                     new Identifier(
