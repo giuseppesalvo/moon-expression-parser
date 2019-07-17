@@ -75,7 +75,7 @@ describe("expression", () => {
 
         expect(result)
         .toEqual([656100000011]);
-    });
+    })
 
     it("a + 2, a = 20, a * 2", () => {
         const exp = new Expression({
@@ -83,7 +83,7 @@ describe("expression", () => {
         });
         const result = exp.evaluate("a + 2, a = 20, a * 2");
         expect(result).toEqual([ 4, 20, 40 ]);
-    });
+    })
 
     it("Context should persists during evaluations", () => {
         const exp = new Expression({
@@ -95,7 +95,7 @@ describe("expression", () => {
         expect(result1).toEqual([ 4 ]);
         expect(result2).toEqual([ 10 ]);
         expect(result3).toEqual([ 30 ]);
-    });
+    })
 
     it("3 + 4 * 2a2 + ( 100 - sin( 5 * 4 ^ a2 ) + 20 / 2 ) ^ 2", () => {
 
@@ -111,7 +111,7 @@ describe("expression", () => {
 
         expect(result)
         .toEqual([12338.64331851954]);
-    });
+    })
 
     it("multiple function arguments", () => {
         const exp = new Expression(
