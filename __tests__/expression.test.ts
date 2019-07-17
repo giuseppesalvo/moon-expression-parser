@@ -135,4 +135,10 @@ describe("expression", () => {
         expect(result).toEqual([ 8 ]);
     })
 
+    it("hello man how are you", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("hello man how are you");
+        expect(result).toEqual([ undefined ]);
+    })
+
 });
