@@ -119,7 +119,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar to
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nfunction __export(m) {\n    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];\n}\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__export(__webpack_require__(/*! ./token */ \"./src/token.ts\"));\n__export(__webpack_require__(/*! ./tokenizer */ \"./src/tokenizer.ts\"));\n__export(__webpack_require__(/*! ./parser */ \"./src/parser.ts\"));\n__export(__webpack_require__(/*! ./evaluate */ \"./src/evaluate.ts\"));\n__export(__webpack_require__(/*! ./expression */ \"./src/expression.ts\"));\nvar parser_1 = __webpack_require__(/*! ./parser */ \"./src/parser.ts\");\nvar tokenizer_1 = __webpack_require__(/*! ./tokenizer */ \"./src/tokenizer.ts\");\nvar expression_1 = __webpack_require__(/*! ./expression */ \"./src/expression.ts\");\nvar exp = new expression_1.Expression();\nvar v = \"1+-+-2\";\nvar result = exp.evaluate(v);\nvar asts = parser_1.parse(tokenizer_1.tokenize(v));\nconsole.log(result);\n\n\n//# sourceURL=webpack://Moon/./src/index.ts?");
+eval("\nfunction __export(m) {\n    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];\n}\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__export(__webpack_require__(/*! ./token */ \"./src/token.ts\"));\n__export(__webpack_require__(/*! ./tokenizer */ \"./src/tokenizer.ts\"));\n__export(__webpack_require__(/*! ./parser */ \"./src/parser.ts\"));\n__export(__webpack_require__(/*! ./evaluate */ \"./src/evaluate.ts\"));\n__export(__webpack_require__(/*! ./expression */ \"./src/expression.ts\"));\n\n\n//# sourceURL=webpack://Moon/./src/index.ts?");
 
 /***/ }),
 
