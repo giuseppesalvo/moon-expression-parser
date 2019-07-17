@@ -162,4 +162,16 @@ describe("expression", () => {
         expect(result).toEqual([ -0.0625 ]);
     })
 
+    it("4 times 2", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("4 times 2");
+        expect(result).toEqual([ 8 ]);
+    })
+
+    it("20 of 150", () => {
+        const exp = new Expression();
+        const result = exp.evaluate("20 of 150");
+        expect(result).toEqual([ 30 ]);
+    })
+
 });

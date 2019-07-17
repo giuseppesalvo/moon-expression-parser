@@ -24,6 +24,8 @@ const Assoc: Record<string, AssocDir> = {
     "+" : AssocDir.left, 
     "-" : AssocDir.left,
     "=" : AssocDir.left,
+    "of" : AssocDir.left,
+    "times" : AssocDir.left,
 };
 
 const PrecedenceMap: Record<string, number> = {
@@ -33,6 +35,8 @@ const PrecedenceMap: Record<string, number> = {
     "+" : 2, 
     "-" : 2,
     "=" : 6,
+    "of" : 1,
+    "times" : 3,
 };
 
 const UnaryPrecedenceMap: Record<string, number> = {
@@ -196,7 +200,7 @@ export const TokenTestMap: TokenTestMap = {
     },
     [TokenType.Operator]: { 
         type: TokenType.Operator,
-        test: (char: string) => /(\+|\-|\*|\/|\^|=)/.test(char),
+        test: (char: string) => /(\+|\-|\*|\/|\^|=|of|times)/.test(char),
     },
     [TokenType.LeftParentesis]: { 
         type: TokenType.LeftParentesis,

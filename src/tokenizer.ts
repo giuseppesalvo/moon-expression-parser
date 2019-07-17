@@ -8,7 +8,8 @@ import {
     Operator,
     LeftParentesis,
     RightParentesis,
-    Comment
+    Comment,
+    TokenTestMap
 } from './token';
 import { peek } from './utils';
 
@@ -76,13 +77,26 @@ export function tokenize(input: string) {
             next();
         }
         if ( state.token.length > 0 ) {
-            tokens.push(
-                new Identifier(
-                    state.index - state.token.length,
-                    state.index,
-                    state.token.join("")
-                )
-            );
+
+            const str = state.token.join("")
+
+            if ( TokenTestMap[TokenType.Operator].test(str) ) {
+                tokens.push(
+                    new Operator(
+                        state.index - state.token.length,
+                        state.index,
+                        str
+                    )
+                );
+            } else {
+                tokens.push(
+                    new Identifier(
+                        state.index - state.token.length,
+                        state.index,
+                        str
+                    )
+                );
+            }
             state.token = [];
         }
     }

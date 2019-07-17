@@ -62,6 +62,8 @@ export function evaluateNode(node: Token, ctx: ExpressionContext): number|undefi
             case "+": return left + right;
             case "-": return left - right;
             case "*": return left * right;
+            case "times": return left * right;
+            case "of": return left * (right/100);
             case "/": return left / right;
             case "^": return left ** right;
             case "=": {
